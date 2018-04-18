@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jianma.sso.dao.UserDao;
 import com.jianma.sso.model.ResultModel;
 import com.jianma.sso.model.Role;
 import com.jianma.sso.model.User;
+import com.jianma.sso.service.UserService;
 import com.jianma.sso.util.JwtUtil;
 import com.jianma.sso.util.Md5SaltTool;
 import com.jianma.sso.util.ResponseCodeUtil;
@@ -36,6 +40,10 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	@Autowired
+	@Qualifier(value = "userServiceImpl")
+	private UserService userServiceImpl;
+	
 	@RequestMapping(value = "/authorityCheck", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultModel authorityCheck(HttpServletRequest request, HttpServletResponse response,
@@ -43,7 +51,7 @@ public class HomeController {
 		WebRequestUtil.AccrossAreaRequestSet(request, response);
 		ResultModel resultModel = new ResultModel();
 
-		Optional<User> user = null;
+		Optional<User> user = userServiceImpl.findByEmail(username);
 		if (user.isPresent()){
 			try {
 				if(Md5SaltTool.validPassword(password, user.get().getPassword())){
