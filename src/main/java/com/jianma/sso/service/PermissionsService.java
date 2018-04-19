@@ -7,4 +7,6 @@ public interface PermissionsService {
 	public int createPermission(Permission permission);
 
 	public int deletePermission(Long permissionId);
+	
+	public int updatePermission(Permission permission);
 }

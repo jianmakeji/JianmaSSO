@@ -41,6 +41,19 @@ public class PermissionsServiceImpl implements PermissionsService {
 			return ResponseCodeUtil.PERMISSION_OPERATION_SUCESS;
 		}
 		catch(Exception e){
+			e.printStackTrace();
+			return ResponseCodeUtil.PERMISSION_OPERATION_FAILURE;
+		}
+	}
+
+	@Override
+	public int updatePermission(Permission permission) {
+		try{
+			permissionDaoImpl.updatePermission(permission);
+			return ResponseCodeUtil.PERMISSION_OPERATION_SUCESS;
+		}
+		catch(Exception e){
+			e.printStackTrace();
 			return ResponseCodeUtil.PERMISSION_OPERATION_FAILURE;
 		}
 	}

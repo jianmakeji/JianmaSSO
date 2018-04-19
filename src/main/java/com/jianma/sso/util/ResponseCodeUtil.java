@@ -7,6 +7,9 @@ public class ResponseCodeUtil {
 
 	public static final int PERMISSION_OPERATION_SUCESS = 1;
 	public static final int PERMISSION_OPERATION_FAILURE = 0;
+	
+	public static final int ROLE_OPERATION_SUCESS = 1;
+	public static final int ROLE_OPERATION_FAILURE = 0;
 
 	public static final int USER_FINDPWD_SUCESS = 1;
 	public static final int USER_FINDPWD_LINK_OUT_TIME = 2; //链接已经过期

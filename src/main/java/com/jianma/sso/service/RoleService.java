@@ -4,9 +4,9 @@ import com.jianma.sso.model.Role;
 
 public interface RoleService {
 
-	public void createRole(Role role);
-    public void deleteRole(Long roleId);
+	public int createRole(Role role);
+    public int deleteRole(Long roleId);
 
-    public void correlationPermissions(Long roleId, Long... permissionIds);
-    public void uncorrelationPermissions(Long roleId, Long... permissionIds);
+    public int correlationPermissions(Long roleId, Long... permissionIds);
+    public int uncorrelationPermissions(Long roleId, Long... permissionIds);
 }

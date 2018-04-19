@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jianma.sso.dao.RoleDao;
 import com.jianma.sso.model.Role;
 import com.jianma.sso.service.RoleService;
+import com.jianma.sso.util.ResponseCodeUtil;
 
 
 @Service
@@ -22,24 +23,53 @@ public class RoleServiceImpl implements RoleService {
 	private RoleDao roleDaoImpl;
 	
 	@Override
-	public void createRole(Role role) {
+	public int createRole(Role role) {
+		try{
+			roleDaoImpl.createRole(role);
+			return ResponseCodeUtil.ROLE_OPERATION_SUCESS;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return ResponseCodeUtil.ROLE_OPERATION_FAILURE;
+		}
 		
-		roleDaoImpl.createRole(role);
 	}
 
 	@Override
-	public void deleteRole(Long roleId) {
-		roleDaoImpl.deleteRole(roleId);
+	public int deleteRole(Long roleId) {
+		try{
+			roleDaoImpl.deleteRole(roleId);
+			return ResponseCodeUtil.ROLE_OPERATION_SUCESS;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return ResponseCodeUtil.ROLE_OPERATION_FAILURE;
+		}
 	}
 
 	@Override
-	public void correlationPermissions(Long roleId, Long... permissionIds) {
-		roleDaoImpl.correlationPermissions(roleId, permissionIds);
+	public int correlationPermissions(Long roleId, Long... permissionIds) {
+		try{
+			roleDaoImpl.correlationPermissions(roleId, permissionIds);
+			return ResponseCodeUtil.ROLE_OPERATION_SUCESS;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return ResponseCodeUtil.ROLE_OPERATION_FAILURE;
+		}
 	}
 
 	@Override
-	public void uncorrelationPermissions(Long roleId, Long... permissionIds) {
-		roleDaoImpl.uncorrelationPermissions(roleId, permissionIds);
+	public int uncorrelationPermissions(Long roleId, Long... permissionIds) {
+		
+		try{
+			roleDaoImpl.uncorrelationPermissions(roleId, permissionIds);
+			return ResponseCodeUtil.ROLE_OPERATION_SUCESS;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return ResponseCodeUtil.ROLE_OPERATION_FAILURE;
+		}
 	}
 
 }
