@@ -1,6 +1,7 @@
 package com.jianma.sso.dao.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -46,6 +47,25 @@ public class PermissionDaoImpl implements PermissionDao {
 		query.setParameter(1, new Date());
 		query.setParameter(2, permission.getId());
 		query.executeUpdate();
+	}
+
+	@Override
+	public List<Permission> getDataByPage(int limit, int offset) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = " from Permission p ";
+		Query query = session.createQuery(hql);
+		query.setMaxResults(limit);
+		query.setFirstResult(offset);
+		return query.list();
+	}
+
+	@Override
+	public int countPermissions() {
+		Session session = sessionFactory.getCurrentSession();
+		final String hql = " select count(p) from Permission p"; 
+        final Query query = session.createQuery(hql); 
+        long count = (Long)query.uniqueResult();
+        return (int)count;
 	}
 
 }

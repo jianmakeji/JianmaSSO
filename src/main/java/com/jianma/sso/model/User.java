@@ -33,7 +33,6 @@ public class User implements java.io.Serializable {
 	private String password;
 	private Date createtime;
 	private byte valid;
-	private String slot;
 	
 	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
 
@@ -48,12 +47,11 @@ public class User implements java.io.Serializable {
 	}
 
 	public User(String email, String password, Date createtime, 
-			byte valid, String slot, Set<UserRole> userRoles) {
+			byte valid, Set<UserRole> userRoles) {
 		this.email = email;
 		this.password = password;
 		this.createtime = createtime;
 		this.valid = valid;
-		this.slot = slot;
 		this.userRoles = userRoles;
 	}
 
@@ -107,16 +105,8 @@ public class User implements java.io.Serializable {
 		this.valid = valid;
 	}
 	
-	@Column(name = "slot", length = 40)
-	public String getSlot() {
-		return this.slot;
-	}
 
-	public void setSlot(String slot) {
-		this.slot = slot;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY,cascade={CascadeType.ALL}, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user",cascade=CascadeType.ALL)
 	public Set<UserRole> getUserRoles() {
 		return this.userRoles;
 	}
@@ -125,8 +115,4 @@ public class User implements java.io.Serializable {
 		this.userRoles = userRoles;
 	}
 
-	@Transient
-	public String getCredentialsSalt() {
-		return email + slot;
-	}
 }

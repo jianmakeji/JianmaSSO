@@ -43,14 +43,7 @@ public class UserServiceImpl implements UserService {
 			} else {
 				
 				user.setPassword(Md5SaltTool.getEncryptedPwd(user.getPassword()));
-				Set<UserRole> userRoles = new HashSet<>();
-				UserRole userRole = new UserRole();
-				userRole.setUser(user);
-				Role role = new Role();
-				role.setId(3);
-				userRole.setRole(role);
-				userRoles.add(userRole);
-				user.setUserRoles(userRoles);
+				
 				userDaoImpl.createUser(user);
 
 				
@@ -119,14 +112,14 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public int updatePwd(String email, String password,String oldSlot) {
+	public int updatePwd(String email, String password) {
 		try {
 
 			User user = new User();
-			user.setPassword(Md5SaltTool.getEncryptedPwd(user.getPassword()));
+			user.setPassword(Md5SaltTool.getEncryptedPwd(password));
 			user.setEmail(email);
 			
-			userDaoImpl.updatePwd(email, user.getPassword(), oldSlot, user.getSlot());
+			userDaoImpl.updatePwd(email, user.getPassword());
 			return ResponseCodeUtil.UESR_OPERATION_SUCESS;
 
 		} catch (Exception e) {
@@ -137,9 +130,27 @@ public class UserServiceImpl implements UserService {
 	
 	
 	@Override
-	public Optional<User> checkAuthc(String email) {
-		// TODO Auto-generated method stub
-		return userDaoImpl.checkAuthc(email);
+	public int checkAuthc(String email, String password) {
+
+		try {
+			Optional<User> opUser = userDaoImpl.checkAuthc(email);
+			if (opUser.isPresent()){
+				User user = opUser.get();
+				if(Md5SaltTool.validPassword(password, user.getPassword())){
+					return ResponseCodeUtil.UESR_CHECK_PWD_SUCCESS;
+				}
+				else{
+					return ResponseCodeUtil.UESR_CHECK_PWD_FAILURE;
+				}
+			}
+			else{
+				return ResponseCodeUtil.UESR_OPERATION_USER_IS_NOT_EXISTS;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseCodeUtil.UESR_OPERATION_FAILURE;
+		}
+		
 	}
 
 	@Override

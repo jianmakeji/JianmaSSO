@@ -1,5 +1,6 @@
 package com.jianma.sso.dao.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,19 +63,13 @@ public class RoleDaoImpl implements RoleDao {
 
 	@Override
 	public void uncorrelationPermissions(Long roleId, Long... permissionIds) {
+		List<Long> list = Arrays.asList(permissionIds);
 		Session session = sessionFactory.getCurrentSession();
-		Role role = new Role();
-		role.setId(roleId.intValue());
-
-		for (Long permissionId : permissionIds) {
-			UserRole userRole = new UserRole();
-			Role role = new Role();
-			role.setId(roleId.intValue());
-			userRole.setUser(user);
-			userRole.setRole(role);
-			session.delete(userRole);
-		}
-
+		String sql = " delete from permission_role where roleId = :roleId  and permissionId in (:permissionIds)";
+		Query query = session.createSQLQuery(sql);
+		query.setParameter("roleId", roleId);
+		query.setParameterList("permissionIds", list);
+		query.executeUpdate();
 	}
 
 	@Override
@@ -91,5 +86,37 @@ public class RoleDaoImpl implements RoleDao {
 			return Optional.empty();
 		}
 	}
+
+	@Override
+	public void updateRole(Role role) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = " update Role r set r.rolename = ?, r.createtime = ? where r.id = ? ";
+		Query query = session.createQuery(hql);
+		query.setParameter(0, role.getRolename());
+		query.setParameter(1, role.getCreatetime());
+		query.setParameter(2, role.getId());
+		query.executeUpdate();
+	}
+
+	@Override
+	public List<Role> getDataByPage(int limit, int offset) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = " from Role r ";
+		Query query = session.createQuery(hql);
+		query.setMaxResults(limit);
+		query.setFirstResult(offset);
+		return query.list();
+	}
+
+	@Override
+	public int countRole() {
+		Session session = sessionFactory.getCurrentSession();
+		final String hql = " select count(r) from Role r"; 
+        final Query query = session.createQuery(hql); 
+        long count = (Long)query.uniqueResult();
+        return (int)count;
+	}
+	
+	
 
 }

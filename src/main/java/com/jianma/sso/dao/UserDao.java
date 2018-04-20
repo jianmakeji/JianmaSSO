@@ -28,12 +28,8 @@ public interface UserDao {
     
     public void updateValidSign(String email, int validValue);
         
-    public void updatePwd(String email, String password, String oldSlot,String newSlot);
-    
-    public void updateJudgePwd(String email, String password, String slot);
-    
-    public void resetLoginUserPwd(String email, String password, String slot);
-    
+    public void updatePwd(String email, String password);
+        
     public List<User> findUserListByPage(int offset, int limit);
     
     public int getCountUser();

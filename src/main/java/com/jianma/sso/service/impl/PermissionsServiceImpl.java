@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jianma.sso.dao.PermissionDao;
+import com.jianma.sso.model.PageModel;
 import com.jianma.sso.model.Permission;
 import com.jianma.sso.service.PermissionsService;
 import com.jianma.sso.util.ResponseCodeUtil;
@@ -56,6 +57,14 @@ public class PermissionsServiceImpl implements PermissionsService {
 			e.printStackTrace();
 			return ResponseCodeUtil.PERMISSION_OPERATION_FAILURE;
 		}
+	}
+
+	@Override
+	public PageModel getDataByPage(int limit, int offset) {
+		PageModel pageModel = new PageModel();
+		pageModel.setList(permissionDaoImpl.getDataByPage(limit, offset));
+		pageModel.setCount(permissionDaoImpl.countPermissions());
+		return pageModel;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.jianma.sso;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.jianma.sso.model.PageModel;
 import com.jianma.sso.model.Permission;
 import com.jianma.sso.service.PermissionsService;
 
@@ -23,7 +25,7 @@ public class PermissionTest {
 	//@Test
 	public void createPermission(){
 		Permission permission = new Permission();
-		permission.setPermissionName("xxxx");
+		permission.setPermissionName("搭配APP");
 		permission.setCreatetime(new Date());
 		permissionServiceImpl.createPermission(permission);
 		/*
@@ -33,7 +35,7 @@ public class PermissionTest {
 		*/
 	}
 	
-	@Test
+	//@Test
 	public void deletePermission(){
 		permissionServiceImpl.deletePermission(4L);
 	}
@@ -45,5 +47,19 @@ public class PermissionTest {
 		permission.setPermissionName("设计看板系统");
 		permission.setCreatetime(new Date());
 		permissionServiceImpl.updatePermission(permission);
+	}
+	
+	@Test
+	public void getDataPage(){
+		PageModel pageModel = permissionServiceImpl.getDataByPage(10, 0);
+		System.out.println(pageModel.getCount());
+		
+		List<?> list = pageModel.getList();
+		
+		for(Object obj : list){
+			if (obj instanceof Permission){
+				System.out.println(((Permission)obj).getPermissionName());
+			}
+		}
 	}
 }

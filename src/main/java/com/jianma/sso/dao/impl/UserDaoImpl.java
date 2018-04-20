@@ -133,21 +133,19 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void updatePwd(String email, String password, String oldSlot,String newSlot) {
+	public void updatePwd(String email, String password) {
 		Session session = sessionFactory.getCurrentSession();
-		String sql = " update user u set u.password = ?, u.slot = ? where u.email = ? and u.slot = ?";
+		String sql = " update user u set u.password = ? where u.email = ? ";
 		Query query = session.createSQLQuery(sql);
 		query.setParameter(0, password); 
-		query.setParameter(1, newSlot); 
-        query.setParameter(2, email); 
-        query.setParameter(3, oldSlot);
+        query.setParameter(1, email); 
 		query.executeUpdate();
 	}
 
 	@Override
 	public Optional<User> checkAuthc(String email) {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = " from User u where u.email = ? and u.activesign = 1 ";
+		String hql = " from User u where u.email = ? and u.valid = 1 ";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, email);
 		List<User> list = query.list();
@@ -159,16 +157,6 @@ public class UserDaoImpl implements UserDao {
 		}
 	}
 
-	@Override
-	public void resetLoginUserPwd(String email, String password, String slot) {
-		Session session = sessionFactory.getCurrentSession();
-		String hql = " update User u set u.password = ?, u.slot = ? where u.email = ?";
-		Query query = session.createQuery(hql);
-		query.setParameter(0, password); 
-		query.setParameter(1, slot); 
-        query.setParameter(2, email); 
-		query.executeUpdate();
-	}
 
 	@Override
 	public List<User> findUserListByPage(int offset, int limit) {
@@ -206,16 +194,6 @@ public class UserDaoImpl implements UserDao {
         return (int)((Long)query.uniqueResult()).longValue();
 	}
 
-	@Override
-	public void updateJudgePwd(String email, String password, String slot) {
-		Session session = sessionFactory.getCurrentSession();
-		String sql = " update user u set u.password = ?, u.slot = ? where u.email = ? ";
-		Query query = session.createSQLQuery(sql);
-		query.setParameter(0, password); 
-		query.setParameter(1, slot); 
-        query.setParameter(2, email); 
-		query.executeUpdate();
-	}
 
 	@Override
 	public void deleteUserByEmail(String email) {

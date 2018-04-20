@@ -24,9 +24,9 @@ public interface UserService {
 
     public Set<String> findPermissions(String username);
         
-    public int updatePwd(String email, String password,String oldSlot);
+    public int updatePwd(String email, String password);
         
-    public Optional<User> checkAuthc(String email);
+    public int checkAuthc(String email, String password);
     
     public PageModel getUserByPage(int offset, int limit);
     
