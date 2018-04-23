@@ -2,7 +2,9 @@ package com.jianma.sso;
 
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -70,6 +72,140 @@ public class RoleController extends SSOController{
 
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
+	public ResultModel deleteRole(HttpServletRequest request, HttpServletResponse response,  @RequestParam int id)
+			throws SSOException {
+		resultModel = new ResultModel();
+
+		int result = 0;
+		try {
+			result = roleServiceImpl.deleteRole((long)id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SSOException(500, "创建出错");
+		}
+
+		if (result == ResponseCodeUtil.ROLE_OPERATION_FAILURE)
+		{
+			resultModel.setResultCode(400);
+			resultModel.setSuccess(false);
+			resultModel.setMessage("创建失败!");
+		}
+		else {
+			resultModel.setResultCode(200);
+			resultModel.setSuccess(true);
+		}
+
+		return resultModel;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/updateRole", method = RequestMethod.POST)
+	public ResultModel updateRole(HttpServletRequest request, HttpServletResponse response, @RequestBody Role role)
+			throws SSOException {
+		resultModel = new ResultModel();
+
+		role.setCreatetime(new Date());
+		int result = 0;
+		try {
+			result = roleServiceImpl.updateRole(role);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SSOException(500, "创建出错");
+		}
+
+		if (result == ResponseCodeUtil.ROLE_OPERATION_FAILURE)
+		{
+			resultModel.setResultCode(400);
+			resultModel.setSuccess(false);
+			resultModel.setMessage("创建失败!");
+		}
+		else {
+			resultModel.setResultCode(200);
+			resultModel.setSuccess(true);
+		}
+
+		return resultModel;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/correlationPermissions", method = RequestMethod.POST)
+	public ResultModel correlationPermissions(HttpServletRequest request, HttpServletResponse response, @RequestParam int roleId, @RequestParam String permissionIds)
+			throws SSOException {
+		resultModel = new ResultModel();
+		
+		String[] arrayPermissionIds = permissionIds.split(",");
+		Long[] longPermissionIds = new Long[arrayPermissionIds.length];
+		
+		List<Long> longList = new ArrayList<>();
+		for (String s : arrayPermissionIds){
+			longList.add(Long.parseLong(s));
+		}
+		longList.toArray(longPermissionIds);
+		
+		int result = 0;
+		try {
+			result = roleServiceImpl.correlationPermissions((long)roleId, longPermissionIds);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SSOException(500, "创建出错");
+		}
+
+		if (result == ResponseCodeUtil.ROLE_OPERATION_FAILURE)
+		{
+			resultModel.setResultCode(400);
+			resultModel.setSuccess(false);
+			resultModel.setMessage("创建失败!");
+		}
+		else {
+			resultModel.setResultCode(200);
+			resultModel.setSuccess(true);
+		}
+
+		return resultModel;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/uncorrelationPermissions", method = RequestMethod.POST)
+	public ResultModel uncorrelationPermissions(HttpServletRequest request, HttpServletResponse response, @RequestParam int roleId, @RequestParam String permissionIds)
+			throws SSOException {
+		resultModel = new ResultModel();
+		
+		String[] arrayPermissionIds = permissionIds.split(",");
+		Long[] longPermissionIds = new Long[arrayPermissionIds.length];
+		
+		List<Long> longList = new ArrayList<>();
+		for (String s : arrayPermissionIds){
+			longList.add(Long.parseLong(s));
+		}
+		longList.toArray(longPermissionIds);
+		
+		int result = 0;
+		try {
+			result = roleServiceImpl.uncorrelationPermissions((long)roleId, longPermissionIds);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SSOException(500, "创建出错");
+		}
+
+		if (result == ResponseCodeUtil.ROLE_OPERATION_FAILURE)
+		{
+			resultModel.setResultCode(400);
+			resultModel.setSuccess(false);
+			resultModel.setMessage("创建失败!");
+		}
+		else {
+			resultModel.setResultCode(200);
+			resultModel.setSuccess(true);
+		}
+
+		return resultModel;
+
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/getDataByPage", method = RequestMethod.POST)

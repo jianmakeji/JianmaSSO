@@ -1,7 +1,5 @@
 package com.jianma.sso.service;
 
-import java.util.List;
-
 import com.jianma.sso.model.PageModel;
 import com.jianma.sso.model.Role;
 

@@ -1,6 +1,7 @@
 package com.jianma.sso.util;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,6 +10,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianma.sso.model.User;
+import com.jianma.sso.model.UserRole;
 
 import io.jsonwebtoken.*;
 
@@ -72,10 +74,15 @@ public class JwtUtil {
 	 * @param user
 	 * @return
 	 */
-	public static String generalSubject(User user){
+	public static String generalSubject(int userId,Set<UserRole> set){
+		StringBuilder sBuilder = new StringBuilder();
+		for (UserRole uRole:set){
+			sBuilder.append(uRole.getRole().getRolename());
+			sBuilder.append(",");
+		}
 		JSONObject jo = new JSONObject();
-		jo.put("userId", user.getId());
-		jo.put("roles", user.getUserRoles());
+		jo.put("userId", userId);
+		jo.put("roles", sBuilder.toString());
 		return jo.toJSONString();
 	}
 }

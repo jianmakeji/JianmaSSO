@@ -2,9 +2,11 @@ package com.jianma.sso;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import com.jianma.sso.dao.UserDao;
 import com.jianma.sso.model.ResultModel;
 import com.jianma.sso.model.Role;
 import com.jianma.sso.model.User;
+import com.jianma.sso.model.UserRole;
 import com.jianma.sso.service.UserService;
 import com.jianma.sso.util.JwtUtil;
 import com.jianma.sso.util.Md5SaltTool;
@@ -55,7 +58,8 @@ public class HomeController {
 		if (user.isPresent()){
 			try {
 				if(Md5SaltTool.validPassword(password, user.get().getPassword())){
-					String subject = JwtUtil.generalSubject(user.get());
+					
+					String subject = JwtUtil.generalSubject(user.get().getId(),user.get().getUserRoles());
 					String token = JwtUtil.createJWT(ResponseCodeUtil.JWT_ID, subject, ResponseCodeUtil.JWT_TTL);
 					String refreshToken = JwtUtil.createJWT(ResponseCodeUtil.JWT_ID, subject, ResponseCodeUtil.JWT_REFRESH_TTL);
 					JSONObject jo = new JSONObject();
@@ -96,11 +100,19 @@ public class HomeController {
  		JSONObject jObject = JSONObject.parseObject(json);
  		User user = new User();
  		user.setId(jObject.getIntValue("userId"));
- 		Set<Role> roles = new TreeSet<>();
- 		Role role = new Role();
- 		role.setId(jObject.getIntValue("roleId"));
- 		roles.add(role);
- 		String subject = JwtUtil.generalSubject(user);
+ 		
+ 		Set<UserRole> userRoles = new HashSet<>();
+ 		
+ 		String[] roles = jObject.getString("roles").split(",");
+ 		UserRole uRole = null;
+ 		for (String roleName : roles){
+ 			uRole = new UserRole();
+ 			uRole.setUser(user);
+ 			Role role = new Role();
+ 			role.setRolename(roleName);
+ 			uRole.setRole(role);
+ 		}
+ 		String subject = JwtUtil.generalSubject(user.getId(),userRoles);
  		String refreshToken = JwtUtil.createJWT(ResponseCodeUtil.JWT_ID, subject, ResponseCodeUtil.JWT_TTL);
  		
 		resultModel.setResultCode(200);

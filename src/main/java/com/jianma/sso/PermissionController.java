@@ -32,7 +32,7 @@ public class PermissionController extends SSOController{
 	
 	@ResponseBody
 	@RequestMapping(value = "/createPermission", method = RequestMethod.POST)
-	public ResultModel createRole(HttpServletRequest request, HttpServletResponse response, @RequestBody Permission permission)
+	public ResultModel createPermission(HttpServletRequest request, HttpServletResponse response, @RequestBody Permission permission)
 			throws SSOException {
 		resultModel = new ResultModel();
 
@@ -61,7 +61,66 @@ public class PermissionController extends SSOController{
 
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/deletePermission", method = RequestMethod.POST)
+	public ResultModel deletePermission(HttpServletRequest request, HttpServletResponse response, @RequestParam int id)
+			throws SSOException {
+		resultModel = new ResultModel();
+
+		int result = 0;
+		try {
+			result = permissionServiceImpl.deletePermission((long)id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SSOException(500, "创建出错");
+		}
+
+		if (result == ResponseCodeUtil.PERMISSION_OPERATION_SUCESS)
+		{
+			resultModel.setResultCode(200);
+			resultModel.setSuccess(true);
+			
+		}
+		else {
+			resultModel.setResultCode(400);
+			resultModel.setSuccess(false);
+			resultModel.setMessage("创建失败!");
+		}
+
+		return resultModel;
+
+	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/updatePermission", method = RequestMethod.POST)
+	public ResultModel updatePermission(HttpServletRequest request, HttpServletResponse response, @RequestBody Permission permission)
+			throws SSOException {
+		resultModel = new ResultModel();
+
+		permission.setCreatetime(new Date());
+		int result = 0;
+		try {
+			result = permissionServiceImpl.updatePermission(permission);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SSOException(500, "创建出错");
+		}
+
+		if (result == ResponseCodeUtil.PERMISSION_OPERATION_SUCESS)
+		{
+			resultModel.setResultCode(200);
+			resultModel.setSuccess(true);
+			
+		}
+		else {
+			resultModel.setResultCode(400);
+			resultModel.setSuccess(false);
+			resultModel.setMessage("创建失败!");
+		}
+
+		return resultModel;
+
+	}
 	@ResponseBody
 	@RequestMapping(value = "/getDataByPage", method = RequestMethod.POST)
 	public ListResultModel getDataByPage(HttpServletRequest request, HttpServletResponse response,
