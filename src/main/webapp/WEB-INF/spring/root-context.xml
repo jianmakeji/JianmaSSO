@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-		
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd 
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/mvc/spring-aop.xsd">
+
+	<mvc:annotation-driven enable-matrix-variables="true">
+	</mvc:annotation-driven>
+
+	<mvc:interceptors>  
+        <mvc:interceptor>  
+            <!-- 一级目录 -->  
+            <mvc:mapping path="/user/*" />
+  			<mvc:mapping path="/role/*" />
+  			<mvc:mapping path="/permission/*" />
+            <!-- 需排除拦截的地址 -->  
+            <mvc:exclude-mapping path="/authorityCheck"/>
+            <mvc:exclude-mapping path="/refreshToken"/>
+            <bean class="com.jianma.sso.interceptor.TokenInterceptor" />  
+        </mvc:interceptor>  
+    </mvc:interceptors>  
+    
+	<import resource="appServlet/servlet-context.xml" />
 </beans>

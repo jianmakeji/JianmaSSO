@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +36,12 @@ public class WebRequestUtil {
 	    if (method.equals("OPTIONS")){
 	    	response.setStatus(200);
 	    }
+	}
+	
+	public static void setResponseCookie(HttpServletResponse response,String token){
+		Cookie cookie = new Cookie("fzcloud",token);
+		cookie.setDomain("localhost");
+		response.addCookie(cookie);
 	}
 	
 	public static void responseOutWithJson(HttpServletResponse response, Object responseObject) {

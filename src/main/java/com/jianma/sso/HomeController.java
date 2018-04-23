@@ -2,7 +2,9 @@ package com.jianma.sso;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianma.sso.dao.UserDao;
+import com.jianma.sso.model.Permission;
+import com.jianma.sso.model.PermissionRole;
 import com.jianma.sso.model.ResultModel;
 import com.jianma.sso.model.Role;
 import com.jianma.sso.model.User;
@@ -67,9 +71,11 @@ public class HomeController {
 					jo.put("refreshToken", refreshToken);
 					jo.put("userId", user.get().getId());
 					jo.put("roles", user.get().getUserRoles());
+					jo.put("permissions", userServiceImpl.findPermissions(username));
 					resultModel.setObject(jo);
 					resultModel.setMessage("验证成功!");
 					resultModel.setResultCode(200);
+					WebRequestUtil.setResponseCookie(response, token);
 				}else{
 					resultModel.setMessage("密码不正确!");
 					resultModel.setResultCode(110);
