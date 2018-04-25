@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,6 +51,16 @@ public class HomeController {
 	@Autowired
 	@Qualifier(value = "userServiceImpl")
 	private UserService userServiceImpl;
+	
+	@RequestMapping(value = "/")
+	public String home(HttpServletRequest request, Model model) {
+		return "home";
+	}
+	
+	@RequestMapping(value = "/login")
+	public String login(HttpServletRequest request, Model model) {
+		return "login";
+	}
 	
 	@RequestMapping(value = "/authorityCheck", method = RequestMethod.POST)
 	@ResponseBody
