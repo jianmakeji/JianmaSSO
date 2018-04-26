@@ -22,7 +22,7 @@ public class PermissionTest {
 	@Qualifier(value = "permissionServiceImpl")
 	private PermissionsService permissionServiceImpl;
 	
-	//@Test
+	@Test
 	public void createPermission(){
 		Permission permission = new Permission();
 		permission.setPermissionName("搭配APP");

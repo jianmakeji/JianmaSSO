@@ -91,7 +91,7 @@ public class HomeController {
 					resultModel.setObject(jo);
 					resultModel.setMessage("验证成功!");
 					resultModel.setResultCode(200);
-					
+					resultModel.setSuccess(true);
 					Set<UserRole> userRoleSet = userObj.getUserRoles();
 					StringBuilder roleBuilder = new StringBuilder();
 					userRoleSet.stream().forEach((userRole)->{

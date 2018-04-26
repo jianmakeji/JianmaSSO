@@ -26,7 +26,7 @@ public class RoleTest {
 	@Qualifier(value = "roleServiceImpl")
 	private RoleService roleServiceImpl;
 	
-	//@Test
+	@Test
 	public void createRole(){
 		Role role = new Role();
 		role.setRolename("管理员");

@@ -26,7 +26,7 @@ public class UserTest {
 	@Qualifier(value = "userServiceImpl")
 	private UserService userServiceImpl;
 	
-	//@Test
+	@Test
 	public void createUser(){
 		User user = new User();
 		user.setEmail("cidic@cidic.cn");
