@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -39,9 +41,16 @@ public class WebRequestUtil {
 	}
 	
 	public static void setResponseCookie(HttpServletResponse response,String token){
-		Cookie cookie = new Cookie("fzcloud",token);
-		cookie.setDomain("localhost");
-		response.addCookie(cookie);
+		Cookie cookie;
+		try {
+			cookie = new Cookie("token",URLEncoder.encode(token, "utf-8"));
+			cookie.setDomain("localhost");
+			response.addCookie(cookie);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void responseOutWithJson(HttpServletResponse response, Object responseObject) {

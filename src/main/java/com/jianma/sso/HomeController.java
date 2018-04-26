@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jianma.sso.dao.UserDao;
 import com.jianma.sso.model.Permission;
@@ -78,15 +79,38 @@ public class HomeController {
 					String token = JwtUtil.createJWT(ResponseCodeUtil.JWT_ID, subject, ResponseCodeUtil.JWT_TTL);
 					String refreshToken = JwtUtil.createJWT(ResponseCodeUtil.JWT_ID, subject, ResponseCodeUtil.JWT_REFRESH_TTL);
 					JSONObject jo = new JSONObject();
+					User userObj = user.get();
+					
+					Set<String> permissionsSet = userServiceImpl.findPermissions(username);
+					
 					jo.put("token", token);
 					jo.put("refreshToken", refreshToken);
-					jo.put("userId", user.get().getId());
-					jo.put("roles", user.get().getUserRoles());
-					jo.put("permissions", userServiceImpl.findPermissions(username));
+					jo.put("userId", userObj.getId());
+					jo.put("roles", userObj.getUserRoles());
+					jo.put("permissions", permissionsSet);
 					resultModel.setObject(jo);
 					resultModel.setMessage("验证成功!");
 					resultModel.setResultCode(200);
-					WebRequestUtil.setResponseCookie(response, token);
+					
+					Set<UserRole> userRoleSet = userObj.getUserRoles();
+					StringBuilder roleBuilder = new StringBuilder();
+					userRoleSet.stream().forEach((userRole)->{
+						roleBuilder.append(userRole.getRole().getRolename() + ",");
+					});
+					
+					StringBuilder permissionBuilder = new StringBuilder();
+					permissionsSet.stream().forEach((s)->{
+						permissionBuilder.append(s + ",");
+					});
+					
+					StringBuilder cookieBuilder = new StringBuilder();
+					cookieBuilder.append("token="+token+"#");
+					cookieBuilder.append("refreshToken="+refreshToken+"#");
+					cookieBuilder.append("userId="+userObj.getId()+"#");
+					cookieBuilder.append("roles="+roleBuilder.toString()+"#");
+					cookieBuilder.append("permissions="+permissionBuilder.toString()+"#");
+					
+					WebRequestUtil.setResponseCookie(response, cookieBuilder.toString());
 				}else{
 					resultModel.setMessage("密码不正确!");
 					resultModel.setResultCode(110);

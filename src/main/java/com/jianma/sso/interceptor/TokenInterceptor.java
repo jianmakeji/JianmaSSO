@@ -1,6 +1,7 @@
 package com.jianma.sso.interceptor;
 
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +40,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 			Cookie cookie = null;
             for (int i = 0; i < cookies.length; i++){
                cookie = cookies[i];
-               if((cookie.getName( )).compareTo("fzcloud") == 0 ){
-                    System.out.println(cookie.getValue());
+               if((cookie.getName( )).compareTo("token") == 0 ){
+                    System.out.println(URLDecoder.decode(cookie.getValue(),"utf-8"));
                }
             }
          }
