@@ -8,6 +8,9 @@
 	<script type="text/javascript" src="resources/js/vue.min.js"></script>
 	<script type="text/javascript" src="resources/js/iview.min.js"></script>
 	<style>
+		[v-cloak] {
+		  	display: none;
+		}
 		.ivu-form{
 			text-align: center;
     		background: #F3F3F3;
@@ -18,13 +21,13 @@
 			width:80%;
 		}
 		.ivu-icon{
-			right:30px;
+			right:45px;
 			top: 15px;
 		}
 	</style>
 </head>
 <body">
-	<div id="login" style="width:25%;margin:200px auto;">
+	<div id="login" style="width:25%;margin:200px auto;" v-cloak>
 		<i-form class="myForm">
 			<h2 style="text-align:center;margin-top:15px;margin-bottom:20px;">单点登录系统</h2>
 	    	<form-item>
@@ -43,6 +46,7 @@
 	<script type="text/javascript" color="110,0,0" opacity='0.7' zIndex="-2" count="300" src="resources/js/canvas-nest.js"></script>
 	<script src="resources/js/jquery-1.10.2.min.js"></script>
 	<script src="resources/js/config.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	
 	<script>
 		/* 获取URL中参数 */
@@ -87,7 +91,7 @@
 	                			},2000);
 			                }
 			            }
-			        });	 
+			        });
 				}
 			},
 			created:function(){
