@@ -35,7 +35,6 @@ public class PermissionController extends SSOController{
 	public ResultModel createPermission(HttpServletRequest request, HttpServletResponse response, @RequestBody Permission permission)
 			throws SSOException {
 		resultModel = new ResultModel();
-
 		permission.setCreatetime(new Date());
 		int result = 0;
 		try {
@@ -122,12 +121,12 @@ public class PermissionController extends SSOController{
 
 	}
 	@ResponseBody
-	@RequestMapping(value = "/getDataByPage", method = RequestMethod.POST)
+	@RequestMapping(value = "/getDataByPage", method = RequestMethod.GET)
 	public ListResultModel getDataByPage(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam int offset, @RequestParam int limit) {
 		ListResultModel listResultModel = new ListResultModel();
 		try {
-			PageModel pageModel = permissionServiceImpl.getDataByPage(offset, limit);
+			PageModel pageModel = permissionServiceImpl.getDataByPage(limit, offset);
 			listResultModel.setTotalRecords(pageModel.getCount());
 			listResultModel.setResultData(pageModel.getList());
 			listResultModel.setSuccess(true);
