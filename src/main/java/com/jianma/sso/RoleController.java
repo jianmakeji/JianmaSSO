@@ -208,12 +208,12 @@ public class RoleController extends SSOController{
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/getDataByPage", method = RequestMethod.POST)
+	@RequestMapping(value = "/getDataByPage", method = RequestMethod.GET)
 	public ListResultModel getDataByPage(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam int offset, @RequestParam int limit) {
 		ListResultModel listResultModel = new ListResultModel();
 		try {
-			PageModel pageModel = roleServiceImpl.getDataByPage(offset, limit);
+			PageModel pageModel = roleServiceImpl.getDataByPage(limit,offset);
 			listResultModel.setTotalRecords(pageModel.getCount());
 			listResultModel.setResultData(pageModel.getList());
 			listResultModel.setSuccess(true);
@@ -222,4 +222,4 @@ public class RoleController extends SSOController{
 		}
 		return listResultModel;
 	}
-}
+} 

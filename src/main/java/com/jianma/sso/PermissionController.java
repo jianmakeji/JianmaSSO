@@ -61,7 +61,7 @@ public class PermissionController extends SSOController{
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/deletePermission", method = RequestMethod.POST)
+	@RequestMapping(value = "/deletePermission", method = RequestMethod.GET)
 	public ResultModel deletePermission(HttpServletRequest request, HttpServletResponse response, @RequestParam int id)
 			throws SSOException {
 		resultModel = new ResultModel();
