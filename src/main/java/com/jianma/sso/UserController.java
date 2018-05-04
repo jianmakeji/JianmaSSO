@@ -117,7 +117,7 @@ public class UserController extends SSOController {
 
 	
 	@ResponseBody
-	@RequestMapping(value = "/getDataByPage", method = RequestMethod.POST)
+	@RequestMapping(value = "/getDataByPage", method = RequestMethod.GET)
 	public ListResultModel getDataByPage(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam int offset, @RequestParam int limit) {
 		ListResultModel listResultModel = new ListResultModel();
