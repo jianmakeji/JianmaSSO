@@ -2,9 +2,12 @@ package com.jianma.sso;
 
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +27,9 @@ import com.jianma.sso.exception.SSOException;
 import com.jianma.sso.model.ListResultModel;
 import com.jianma.sso.model.PageModel;
 import com.jianma.sso.model.ResultModel;
+import com.jianma.sso.model.Role;
 import com.jianma.sso.model.User;
+import com.jianma.sso.model.UserRole;
 import com.jianma.sso.service.UserService;
 import com.jianma.sso.util.GraphicsUtil;
 import com.jianma.sso.util.ResponseCodeUtil;
@@ -47,11 +52,25 @@ public class UserController extends SSOController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResultModel registerUser(HttpServletRequest request, HttpServletResponse response, @RequestBody User user)
+	public ResultModel registerUser(HttpServletRequest request, HttpServletResponse response, @RequestBody User user,
+			@RequestParam String roles)
 			throws SSOException {
 		resultModel = new ResultModel();
 
 		user.setCreatetime(new Date());
+		
+		Set<UserRole> userRoles = new HashSet<UserRole>(5);
+		Arrays.asList(roles.split(",")).stream().forEach((s)->{
+			UserRole userRole = new UserRole();
+			Role role = new Role();
+			role.setId(Integer.parseInt(s));
+			userRole.setUser(user);
+			userRole.setRole(role);
+			userRoles.add(userRole);
+		});
+		
+		user.setUserRoles(userRoles);
+		
 		int result = 0;
 		try {
 			result = userServiceImpl.createUser(user);

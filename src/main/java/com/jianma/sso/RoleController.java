@@ -3,9 +3,12 @@ package com.jianma.sso;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jianma.sso.exception.SSOException;
 import com.jianma.sso.model.ListResultModel;
 import com.jianma.sso.model.PageModel;
+import com.jianma.sso.model.Permission;
+import com.jianma.sso.model.PermissionRole;
 import com.jianma.sso.model.ResultModel;
 import com.jianma.sso.model.Role;
 import com.jianma.sso.service.RoleService;
@@ -39,11 +44,24 @@ public class RoleController extends SSOController{
 	
 	@ResponseBody
 	@RequestMapping(value = "/createRole", method = RequestMethod.POST)
-	public ResultModel createRole(HttpServletRequest request, HttpServletResponse response, @RequestBody Role role)
+	public ResultModel createRole(HttpServletRequest request, HttpServletResponse response, @RequestBody Role role,
+			@RequestParam String permissions)
 			throws SSOException {
 		resultModel = new ResultModel();
 
 		role.setCreatetime(new Date());
+		
+		Set<PermissionRole> permissionRoles = new HashSet<PermissionRole>(5);
+		
+		Arrays.asList(permissions.split(",")).stream().forEach((s)->{
+			PermissionRole pRole = new PermissionRole();
+			pRole.setRole(role);
+			Permission permission = new Permission();
+			permission.setId(Integer.parseInt(s));
+			pRole.setPermission(permission);
+			permissionRoles.add(pRole);
+		});
+		
 		int result = 0;
 		try {
 			result = roleServiceImpl.createRole(role);
