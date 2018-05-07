@@ -91,7 +91,7 @@ public class RoleController extends SSOController{
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteRole", method = RequestMethod.GET)
 	public ResultModel deleteRole(HttpServletRequest request, HttpServletResponse response,  @RequestParam int id)
 			throws SSOException {
 		resultModel = new ResultModel();
