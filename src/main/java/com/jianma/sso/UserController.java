@@ -56,7 +56,7 @@ public class UserController extends SSOController {
 			@RequestParam String roles)
 			throws SSOException {
 		resultModel = new ResultModel();
-
+		user.setValid((byte)1);
 		user.setCreatetime(new Date());
 		
 		Set<UserRole> userRoles = new HashSet<UserRole>(5);
